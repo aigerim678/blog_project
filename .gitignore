@@ -3,6 +3,6 @@ venv/
 __pycache__/
 .vscode
 .idea
-db.sqlite3
+db.sqlite3git
 media/
 cache/
