@@ -1,3 +1,4 @@
+from typing import Any
 from django.shortcuts import get_object_or_404, render
 from django.views.generic import ListView
 from .models import Post
@@ -21,3 +22,18 @@ def post_single(request, post):
         "blog/components/single-post-elements.html",
         {"post": post, "related": related},
     )
+
+
+class TagListView(HomeView):
+    def get_template_names(self):
+        if self.request.htmx:
+            return "blog/components/tags-list-elements.html"
+
+        return "blog/tags.html"
+    def get_queryset(self):
+        return Post.objects.filter(tags__slug=self.kwargs["tag"])
+    
+    def get_context_data(self, **kwargs: Any) -> dict[str, Any]:
+        context = super().get_context_data(**kwargs)
+        context['tag'] = self.kwargs['tag']
+        return context
