@@ -17,3 +17,13 @@ class PostFactory(factory.django.DjangoModelFactory):
             x += "\n" + FAKE.paragraph(nb_sentences=30) + "\n"
         return x
     status = "published"
+
+    @factory.post_generation
+    def tags(self, create, extracted, **kwargs):
+        if not create:
+            # Simple build, do nothing.
+            return
+        if extracted:
+            self.tags.add(extracted)
+        else:
+            self.tags.add("all", "python", "django", "drf", "js", "htmx", "bootstrap")
